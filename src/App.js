@@ -1,8 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import './App.css';
-import pokemon from "./pokemon.json"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const PokemonRow = ({ pokemon, onSelect }) => (
 
@@ -19,16 +18,56 @@ const PokemonRow = ({ pokemon, onSelect }) => (
 PokemonRow.propTypes = {
   pokemon: PropTypes.shape({
     name: PropTypes.shape({
-      english: PropTypes.string,
+      english: PropTypes.string.isRequired,
     }),
-    type: PropTypes.arrayOf(PropTypes.string),
+    type: PropTypes.arrayOf(PropTypes.string.isRequired),
   }),
-  onSelect: PropTypes.func,
-}
+  onSelect: PropTypes.func.isRequired,
+};
+
+const PokemonInfo = ({ name, base }) => (
+  <div>
+    <h1>{name.english}</h1>
+    <table>
+      {
+        Object.keys(base).map(key =>
+          <tr
+            key={key}
+          >
+            <td>{key}</td>
+            <td>{base[key]}</td>
+          </tr>
+        )
+      }
+    </table>
+  </div>
+)
+
+PokemonInfo.propTypes = {
+  name: PropTypes.shape({
+    english: PropTypes.string,
+  }),
+  base: PropTypes.shape({
+    HP: PropTypes.number.isRequired,
+    Attack: PropTypes.number.isRequired,
+    Defense: PropTypes.number.isRequired,
+    "Sp. Attack": PropTypes.number.isRequired,
+    "Sp. Defense": PropTypes.number.isRequired,
+    Speed: PropTypes.number.isRequired,
+  })
+};
+
 
 function App() {
   const [filter, setFilter] = useState("");
+  const [pokemon, setPokemon] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/starting-react/pokemon.json")
+      .then(res => res.json())
+      .then(data => setPokemon(data))
+  }, [])
 
   return (
     <div
@@ -71,11 +110,7 @@ function App() {
             </tbody>
           </table>
         </div>
-        {selectedItem && (
-          <div>
-            <h1>{selectedItem.name.english}</h1>
-          </div>
-        )}
+        {selectedItem && <PokemonInfo {...selectedItem} />}
       </div>
     </div >
   );
