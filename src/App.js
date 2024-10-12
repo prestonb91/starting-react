@@ -4,6 +4,7 @@ import './App.css';
 import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 
+//Row component to show pokemon in columns by name, types, and button to select the pokemon.
 const PokemonRow = ({ pokemon, onSelect }) => (
 
   <tr>
@@ -16,6 +17,7 @@ const PokemonRow = ({ pokemon, onSelect }) => (
 
 )
 
+//Pokemon row component prop types
 PokemonRow.propTypes = {
   pokemon: PropTypes.shape({
     name: PropTypes.shape({
@@ -26,6 +28,7 @@ PokemonRow.propTypes = {
   onSelect: PropTypes.func.isRequired,
 };
 
+//Component containing pokemon info to show upon selection. Uses name header and maps all base object properties to display in one row key name and value. 
 const PokemonInfo = ({ name, base }) => (
   <div>
     <h1>{name.english}</h1>
@@ -44,6 +47,7 @@ const PokemonInfo = ({ name, base }) => (
   </div>
 )
 
+//Pokemon info component prop types
 PokemonInfo.propTypes = {
   name: PropTypes.shape({
     english: PropTypes.string,
@@ -82,10 +86,14 @@ const Input = styled.input`
 `;
 
 function App() {
+  //Filter value that changes upon user typing value into input bar.
   const [filter, setFilter] = useState("");
+  //Pokemon value state that populates an array with pokemon info from fetched data. 
   const [pokemon, setPokemon] = useState([]);
+  //Selected pokemon value state that starts off empty, upon select sets with pokemon selected and displays at bottom of table. 
   const [selectedItem, setSelectedItem] = useState(null);
 
+  //Use effect function to fetch pokemon data and populate pokemon state value.
   useEffect(() => {
     fetch("http://localhost:3000/starting-react/pokemon.json")
       .then(res => res.json())
