@@ -1,4 +1,5 @@
 https://www.youtube.com/playlist?list=PLNqp92_EXZBJ4CBroxVBJEpAXoz1g-naZ
+- Stopped at Introduction to React #8 | Component Libraries
 
 # Getting Started with Create React App
 
